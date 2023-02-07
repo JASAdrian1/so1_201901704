@@ -1,0 +1,33 @@
+.calculadora{
+    place-self: center;
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    width: 20%;
+    height: 60%;
+    background-color: gray;
+
+}
+
+.calculadora-top{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 25%;
+    background-color: black;
+}
+
+
+.display{
+    height: 50%;
+    width: 90%;
+}
+
+
+.teclado{
+    height: 70%;
+    display: flex;
+    
+    justify-content: space-around;
+}
