@@ -25,8 +25,8 @@ const Calculadora = () => {
     }, [resultado])
 
     useEffect(()=>{
-        console.log("AAA")
-        setValorBtn({valor,val1,val2,setVal1,setVal2,setResultado,setOpPresionado,setOperador,operador,opPresionado})
+        if(valor !== "")setValorBtn({valor,val1,val2,setVal1,setVal2,setResultado,setOpPresionado,setOperador,operador,opPresionado})
+        setValor("")
     },[valor])
     
 

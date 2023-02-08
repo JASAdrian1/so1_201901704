@@ -3,6 +3,7 @@ export default function setValor(props) {
         props.setVal1("")
         props.setVal2("")
         props.setResultado("")
+        props.setOperador("")
         props.setOpPresionado(false)
         return
     }
