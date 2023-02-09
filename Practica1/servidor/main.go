@@ -1,10 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"log"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
@@ -14,11 +18,19 @@ type operacion struct {
 	Op   string `json:"op"`
 }
 
+type registro struct {
+	Val1      string
+	Val2      string
+	Op        string
+	Resultado string
+	Fecha     string
+}
+
 func main() {
-	fmt.Println("Hello, World!")
 	router := gin.Default()
 	router.Use(cors.Default())
 	router.POST("/resultado", postOperacion)
+	router.GET("/logs", getLogs)
 	router.Run("localhost:8080")
 }
 
@@ -28,6 +40,11 @@ func postOperacion(c *gin.Context) {
 		return
 	}
 	resultado := calcularResultado(op)
+
+	//Se inserta dentro de la base de datos el log
+	insertarLogDb(op, resultado)
+
+	//Se retorna la front el resultado de la operacion
 	c.IndentedJSON(200, gin.H{"resultado": resultado})
 }
 
@@ -51,4 +68,56 @@ func calcularResultado(operacion operacion) (resultado string) {
 		resultado = fmt.Sprintf("%v", valor1*valor2)
 	}
 	return
+}
+
+func getLogs(c *gin.Context) {
+	//Se establece la conexion con la base de datos
+	db, err := sql.Open("mysql", "root:0000@tcp(127.0.0.1:3306)/operaciones")
+	defer db.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	logs, err := db.Query("SELECT * FROM log")
+	defer logs.Close()
+
+	var tam int
+	tam = 0
+	//Se cuenta la cantidad de registros que hay en la tabla
+	for logs.Next() {
+		tam += 1
+	}
+
+	logsArray := make([]registro, tam)
+
+	for logs.Next() {
+		var lo registro
+		errlog := logs.Scan(&lo.Val1, &lo.Val2, &lo.Op, &lo.Resultado, &lo.Resultado)
+		if errlog != nil {
+			log.Fatal(errlog)
+		}
+		logsArray = append(logsArray, lo)
+		fmt.Println(lo)
+	}
+
+	c.IndentedJSON(http.StatusOK, logs)
+}
+
+func insertarLogDb(op operacion, resultado string) {
+	//Se establece la conexion con la base de datos
+	db, err := sql.Open("mysql", "root:0000@tcp(127.0.0.1:3306)/operaciones")
+	defer db.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Se realiza la insercions dentro de la base datos
+	query := `INSERT INTO log(numero1, numero2, operacion, resultado) VALUES("` + op.Val1 + `","` + op.Val2 + `","` + op.Op + `","` + resultado + `")`
+	fmt.Println(query)
+	_, err3 := db.Exec(query)
+
+	if err3 != nil {
+		panic(err3.Error())
+	}
+
 }
