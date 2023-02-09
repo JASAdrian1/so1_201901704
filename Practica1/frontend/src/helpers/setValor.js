@@ -6,7 +6,7 @@ export default function setValor(props) {
         props.setOperador("")
         props.setOpPresionado(false)
         return
-    }
+    } 
     if (props.valor !== "="){
         if(props.opPresionado === false){
             if(props.valor === "+" || props.valor === "-" || props.valor === "/" || props.valor === "x"){
@@ -20,23 +20,32 @@ export default function setValor(props) {
             props.setVal2(props.val2+props.valor)
         }
     }else{
-        if(props.opPresionado === false){
-            props.setResultado(props.val1)
-        }else{
-            if(props.operador === "+"){
-                props.setResultado(Number(props.val1)+Number(props.val2))
-            }else if(props.operador === "-"){
-                props.setResultado(Number(props.val1)-Number(props.val2))
-            }else if(props.operador === "x"){
-                props.setResultado(Number(props.val1)*Number(props.val2))
-            }else if(props.operador === "/"){
-                props.setResultado(Number(props.val1)/Number(props.val2))
-            }
+        let operacion ={
+            "val1":props.val1,
+            "val2":props.val2,
+            "op":props.operador
         }
+        postOperacion("http://localhost:8080/resultado",operacion)
+        .then((data)=> data.json())
+        .then((data)=>props.setResultado(data.resultado))
+        
         props.setVal1("")
         props.setVal2("")
         props.setOperador("")
         props.setOpPresionado(false)
     }
     
+}
+
+async function postOperacion(url='',data={}){
+    const response = await fetch(url,{
+        method:"POST",
+        mode:"cors",    
+        crossorigin: true,  
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    return response
 }

@@ -11,7 +11,7 @@ const Calculadora = () => {
     const [textoDisplay, setTextoDisplay] = useState("")
 
     const [opPresionado, setOpPresionado] = useState(false)
-    const [valor, setValor] = useState("")
+    const [valorPresionado, setValorPresionado] = useState("")
 
 
     useEffect(() => {
@@ -25,9 +25,9 @@ const Calculadora = () => {
     }, [resultado])
 
     useEffect(()=>{
-        if(valor !== "")setValorBtn({valor,val1,val2,setVal1,setVal2,setResultado,setOpPresionado,setOperador,operador,opPresionado})
-        setValor("")
-    },[valor])
+        if(valorPresionado !== "")setValorBtn({valor:valorPresionado,val1,val2,setVal1,setVal2,setResultado,setOpPresionado,setOperador,operador,opPresionado})
+        setValorPresionado("")
+    },[valorPresionado])
     
 
   return (
@@ -40,32 +40,32 @@ const Calculadora = () => {
                 <table>
                     <tbody>
                         <tr>
-                            <td><Boton valorlbl={"7"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"8"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"9"} setValor={setValor}/></td>
+                            <td><Boton valorlbl={"7"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"8"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"9"} setValor={setValorPresionado}/></td>
                             <td></td>
-                            <td><Boton valorlbl={"C"} setValor={setValor}/></td>
+                            <td><Boton valorlbl={"C"} setValor={setValorPresionado}/></td>
                         </tr>
                         <tr>
-                            <td><Boton valorlbl={"4"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"5"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"6"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"x"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"/"} setValor={setValor}/></td>
+                            <td><Boton valorlbl={"4"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"5"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"6"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"x"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"/"} setValor={setValorPresionado}/></td>
                         </tr>
                         <tr>
-                            <td><Boton valorlbl={"1"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"2"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"3"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"+"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"-"} setValor={setValor}/></td>
+                            <td><Boton valorlbl={"1"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"2"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"3"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"+"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"-"} setValor={setValorPresionado}/></td>
                         </tr>
                         <tr>
-                            <td><Boton valorlbl={"0"} setValor={setValor}/></td>
-                            <td><Boton valorlbl={"."} setValor={setValor}/></td>
+                            <td><Boton valorlbl={"0"} setValor={setValorPresionado}/></td>
+                            <td><Boton valorlbl={"."} setValor={setValorPresionado}/></td>
                             <td></td>
                             <td></td>
-                            <td><Boton valorlbl={"="} setValor={setValor}/></td>
+                            <td><Boton valorlbl={"="} setValor={setValorPresionado}/></td>
                         </tr>
                     </tbody>
                 </table>
