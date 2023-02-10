@@ -81,18 +81,18 @@ func getLogs(c *gin.Context) {
 	logs, err := db.Query("SELECT * FROM log")
 	defer logs.Close()
 
-	var tam int
-	tam = 0
-	//Se cuenta la cantidad de registros que hay en la tabla
-	for logs.Next() {
-		tam += 1
-	}
+	//SE OBTIENE EL NUMERO DE TUPLAS QUE DEVUELVE LA CONSULTA
+	count, _ := db.Query("SELECT COUNT(*) FROM log")
+	defer count.Close()
+	var numTuplas int
+	count.Next()
+	count.Scan(&numTuplas)
 
-	logsArray := make([]registro, tam)
+	logsArray := make([]registro, 0)
 
 	for logs.Next() {
 		var lo registro
-		errlog := logs.Scan(&lo.Val1, &lo.Val2, &lo.Op, &lo.Resultado, &lo.Resultado)
+		errlog := logs.Scan(&lo.Val1, &lo.Val2, &lo.Op, &lo.Resultado, &lo.Fecha)
 		if errlog != nil {
 			log.Fatal(errlog)
 		}
@@ -100,7 +100,7 @@ func getLogs(c *gin.Context) {
 		fmt.Println(lo)
 	}
 
-	c.IndentedJSON(http.StatusOK, logs)
+	c.IndentedJSON(http.StatusOK, logsArray)
 }
 
 func insertarLogDb(op operacion, resultado string) {
