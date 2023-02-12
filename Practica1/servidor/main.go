@@ -31,7 +31,7 @@ func main() {
 	router.Use(cors.Default())
 	router.POST("/resultado", postOperacion)
 	router.GET("/logs", getLogs)
-	router.Run("localhost:8080")
+	router.Run("0.0.0.0:8080")
 }
 
 func postOperacion(c *gin.Context) {
@@ -64,6 +64,9 @@ func calcularResultado(operacion operacion) (resultado string) {
 		resultado = fmt.Sprintf("%v", valor1-valor2)
 	} else if operacion.Op == "/" {
 		resultado = fmt.Sprintf("%v", valor1/valor2)
+		if valor2 == 0 {
+			resultado = "e"
+		}
 	} else if operacion.Op == "x" {
 		resultado = fmt.Sprintf("%v", valor1*valor2)
 	}
@@ -72,7 +75,7 @@ func calcularResultado(operacion operacion) (resultado string) {
 
 func getLogs(c *gin.Context) {
 	//Se establece la conexion con la base de datos
-	db, err := sql.Open("mysql", "root:0000@tcp(127.0.0.1:3306)/operaciones")
+	db, err := sql.Open("mysql", "root:0000@tcp(db-prac1:3306)/operaciones")
 	defer db.Close()
 
 	if err != nil {
@@ -105,7 +108,7 @@ func getLogs(c *gin.Context) {
 
 func insertarLogDb(op operacion, resultado string) {
 	//Se establece la conexion con la base de datos
-	db, err := sql.Open("mysql", "root:0000@tcp(127.0.0.1:3306)/operaciones")
+	db, err := sql.Open("mysql", "root:0000@tcp(db-prac1:3306)/operaciones")
 	defer db.Close()
 
 	if err != nil {
