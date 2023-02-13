@@ -39,5 +39,11 @@ services:
     links:
       - servidor
 
+  bash:
+    container_name: script-bash
+    build: ./bash
+    image: josadriang/script-prac1
+    
+
 volumes:
   data:

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -43,6 +44,9 @@ func postOperacion(c *gin.Context) {
 
 	//Se inserta dentro de la base de datos el log
 	insertarLogDb(op, resultado)
+
+	//Se guarda la informacion en un txt
+	crearArchivoLogs()
 
 	//Se retorna la front el resultado de la operacion
 	c.IndentedJSON(200, gin.H{"resultado": resultado})
@@ -93,6 +97,7 @@ func getLogs(c *gin.Context) {
 
 	logsArray := make([]registro, 0)
 
+	//Se guardan en los structs los datos obtenidos de la consulta
 	for logs.Next() {
 		var lo registro
 		errlog := logs.Scan(&lo.Val1, &lo.Val2, &lo.Op, &lo.Resultado, &lo.Fecha)
@@ -122,5 +127,54 @@ func insertarLogDb(op operacion, resultado string) {
 	if err3 != nil {
 		panic(err3.Error())
 	}
+
+}
+
+func crearArchivoLogs() {
+	//Se establece la conexion con la base de datos
+	db, err := sql.Open("mysql", "root:0000@tcp(db-prac1:3306)/operaciones")
+	defer db.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	logs, err := db.Query("SELECT * FROM log")
+	defer logs.Close()
+
+	//SE OBTIENE EL NUMERO DE TUPLAS QUE DEVUELVE LA CONSULTA
+	count, _ := db.Query("SELECT COUNT(*) FROM log")
+	defer count.Close()
+	var numTuplas int
+	count.Next()
+	count.Scan(&numTuplas)
+
+	logsArray := make([]registro, 0)
+
+	//Se guardan en los structs los datos obtenidos de la consulta
+	for logs.Next() {
+		var lo registro
+		errlog := logs.Scan(&lo.Val1, &lo.Val2, &lo.Op, &lo.Resultado, &lo.Fecha)
+		if errlog != nil {
+			log.Fatal(errlog)
+		}
+		logsArray = append(logsArray, lo)
+		fmt.Println(lo)
+	}
+
+	textLog := ""
+
+	fmt.Println("Escribiendo logs en logs.txt")
+	for _, el := range logsArray {
+		textLog += el.Fecha[8:10] + "," + el.Val1 + "," + el.Val2 + "," + el.Resultado + "," + el.Op + "\n"
+	}
+	fmt.Println(textLog)
+
+	//SE CREA UN ARCHIVO DONDE SE GUARDAN LOS LOGS
+	file, err := os.OpenFile("bash/logs.txt", os.O_CREATE|os.O_WRONLY, 0644)
+	file.WriteString(textLog)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
 
 }
