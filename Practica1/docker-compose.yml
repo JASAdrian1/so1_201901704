@@ -10,6 +10,7 @@ services:
     environment:
       MYSQL_DATABASE: 'operaciones'
       MYSQL_ROOT_PASSWORD: '0000'
+      TZ: 'US/Central'
     volumes:
       - data:/var/lib/mysql
 
@@ -25,7 +26,7 @@ services:
     depends_on:
       - db
     links:
-      - "db:database"  
+      - "db:database" 
 
   frontend:
     container_name: frontend
@@ -43,6 +44,9 @@ services:
     container_name: script-bash
     build: ./bash
     image: josadriang/script-prac1
+    command: sleep infinity
+    volumes:
+      - ".:/backend"
     
 
 volumes:
