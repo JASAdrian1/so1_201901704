@@ -1,6 +1,5 @@
 FROM bash:4.4
 
-COPY script.sh /
-COPY logs.txt /
+WORKDIR /backend/bash
 
 CMD ["bash","/script.sh"]
