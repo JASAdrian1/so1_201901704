@@ -22,7 +22,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "/bash:/backend"
+      - ".:/backend"
     depends_on:
       - db
     links:
@@ -46,7 +46,9 @@ services:
     image: josadriang/script-prac1
     command: sleep infinity
     volumes:
-      - "/bash:/backend"
+      - ".:/backend"
+    depends_on:
+      - servidor
     
 
 volumes:
