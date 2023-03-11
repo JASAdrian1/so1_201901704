@@ -1,18 +1,46 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 
+
 #include <linux/init.h>
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
 #include <linux/seq_file.h>
+
+/* libreria de memoria ram*/
+#include <linux/hugetlb.h>
+
+#include <linux/sched.h>
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Modulo de cpu, practica 2");
 MODULE_AUTHOR("Jose Adrian Aguilar Sanchez");
 
 
+struct task_struct * cpu;
+struct task_struct * child;
+struct list_head * lstProcess;
+
+
 static int escribir_archivo(struct seq_file *archivo, void *v){
-    seq_printf(archivo,"PRUEBA\n");
+    seq_printf(archivo,"data:{");
+    for_each_process(cpu){
+        seq_printf(archivo, "%d", cpu->pid);
+        seq_printf(archivo, " --------> ");
+        seq_printf(archivo, "%s", cpu->comm);
+        seq_printf(archivo, " --------> ");
+        seq_printf(archivo,"%d",cpu->__state);
+        seq_printf(archivo, "\n");
+        /*list_for_each(lstProcess, &(cpu->children)){
+            child = list_entry(lstProcess, struct task_struct, sibling);
+            seq_printf(archivo, "   ");
+            seq_printf(archivo, "%d", child->pid);
+            seq_printf(archivo, " --------> ");
+            seq_printf(archivo, "%s", child->comm);
+            seq_printf(archivo, "\n");
+        }*/
+    }
+    seq_printf(archivo,"}");
     return 0;
 }
 
