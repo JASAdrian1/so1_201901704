@@ -40,13 +40,13 @@ static struct proc_ops operaciones = {
 
 static int _insert(void){
     proc_create("ram_201901704",0,NULL,&operaciones);
-    printk(KERN_INFO "Se inserto el modulo RAM\n");
+    printk(KERN_INFO "201901704\n");
     return 0;
 }
 
 static void _remove(void){
     remove_proc_entry("ram_201901704", NULL);
-    printk(KERN_INFO "Se removio el modulo RAM\n");
+    printk(KERN_INFO "Sistemas operativos 1\n");
 
 }
 
