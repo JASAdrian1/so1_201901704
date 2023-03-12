@@ -25,22 +25,22 @@ struct list_head * lstProcess;
 
 static int escribir_archivo(struct seq_file *archivo, void *v){
     //Devolviendo los valores como json
-    seq_printf(archivo,"data:{[\n");
+    seq_printf(archivo,"{\"data\":[");
     for_each_process(cpu){
-        seq_printf(archivo,"{\n");
-        seq_printf(archivo,"    \"pid\": %d,\n",cpu->pid);
-        seq_printf(archivo,"    \"nombre\": %s,\n",cpu->comm);
-        seq_printf(archivo,"    \"estado\": %d,\n",cpu->__state);
+        seq_printf(archivo,"\n{\n");
+        seq_printf(archivo,"    \"pid\": \"%d\",\n",cpu->pid);
+        seq_printf(archivo,"    \"nombre\": \"%s\",\n",cpu->comm);
+        seq_printf(archivo,"    \"estado\": \"%d\",\n",cpu->__state);
         seq_printf(archivo,"    \"child\": [\n");
         list_for_each(lstProcess, &(cpu->children)){
             child = list_entry(lstProcess, struct task_struct, sibling);
             seq_printf(archivo,"        {\n");
-            seq_printf(archivo,"            \"pid\": %d,\n",child->pid);
-            seq_printf(archivo,"            \"nombre\": %s,\n",child->comm);
-            seq_printf(archivo,"        },\n");
+            seq_printf(archivo,"            \"pid\": \"%d\",\n",child->pid);
+            seq_printf(archivo,"            \"nombre\": \"%s\"\n",child->comm);
+            seq_printf(archivo,"        },");
         }
-        seq_printf(archivo,"    ]\n");
-        seq_printf(archivo,"},\n");
+        seq_printf(archivo,"]\n");
+        seq_printf(archivo,"},");
     }
     seq_printf(archivo,"]}\n");
     
