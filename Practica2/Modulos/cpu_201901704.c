@@ -11,6 +11,7 @@
 #include <linux/hugetlb.h>
 
 #include <linux/sched.h>
+#include <linux/cred.h>
 #include <linux/sched/signal.h>
 
 MODULE_LICENSE("GPL");
@@ -31,6 +32,7 @@ static int escribir_archivo(struct seq_file *archivo, void *v){
         seq_printf(archivo,"    \"pid\": \"%d\",\n",cpu->pid);
         seq_printf(archivo,"    \"nombre\": \"%s\",\n",cpu->comm);
         seq_printf(archivo,"    \"estado\": \"%d\",\n",cpu->__state);
+        seq_printf(archivo,"    \"uid\": \"%d\",\n",cpu->cred->uid);
         seq_printf(archivo,"    \"child\": [\n");
         list_for_each(lstProcess, &(cpu->children)){
             child = list_entry(lstProcess, struct task_struct, sibling);
