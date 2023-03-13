@@ -5,6 +5,7 @@ use sopes1_p2;
 CREATE TABLE proceso(
     id_proceso INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     pid VARCHAR(500) NOT NULL,
+    username VARCHAR(500) NULL,
     nombre VARCHAR(500) NOT NULL,
     estado VARCHAR(500) NOT NULL
 );
