@@ -1,4 +1,4 @@
-#include <sys/sysinfo.h>
+
 #include <linux/module.h>
 #include <linux/kernel.h>
 
@@ -8,17 +8,16 @@
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
 #include <linux/seq_file.h>
-
-
+#include<linux/sysinfo.h>
+#include <linux/mm.h>
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Modulo de ram, practica 2");
 MODULE_AUTHOR("Jose Adrian Aguilar Sanchez");
 
 struct sysinfo info_ram;
-sysinfo(&info_ram);
-
 static int escribir_archivo(struct seq_file *archivo, void *v){
+    si_meminfo(&info_ram);
 
     seq_printf(archivo,"Probando\n"); 
     seq_printf(archivo,"Probando otra cadena\n");
