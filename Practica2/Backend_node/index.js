@@ -47,3 +47,18 @@ app.get("/procesoschild/:pid",(req,res)=>{
         }
     })
 })
+
+
+app.get("/usoram",(req,res)=>{
+    conn.query("SELECT * FROM ram ORDER BY id_ram DESC LIMIT 10",[],(err,results,field)=>{
+        if(err){
+            console.log(err)
+            return res.send
+        }else{
+            //console.log("Inserted "+results.afffectedRows + "row(s)")
+            //console.log(results)
+            res.send({data:results})
+        } 
+    })
+})
+

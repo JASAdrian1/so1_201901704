@@ -1,12 +1,21 @@
 .procesos{
-    position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, 0);
-    text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .tabla-procesos th,.tabla-procesos td{
     
     box-shadow: none;
+}
+
+.graficas{
+  display: flex;
+  
+}
+
+.grafica-ram{
+  display: block;
+  width: 45%;
+  margin: 20px 20px 20px 20px;
 }

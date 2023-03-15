@@ -1,3 +1,4 @@
+obj-m += cpu_201901704.o
 obj-m += ram_201901704.o
 
 all:

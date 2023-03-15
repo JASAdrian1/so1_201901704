@@ -16,12 +16,15 @@ MODULE_DESCRIPTION("Modulo de ram, practica 2");
 MODULE_AUTHOR("Jose Adrian Aguilar Sanchez");
 
 struct sysinfo info_ram;
+
 static int escribir_archivo(struct seq_file *archivo, void *v){
     si_meminfo(&info_ram);
-
-    seq_printf(archivo,"Probando\n"); 
-    seq_printf(archivo,"Probando otra cadena\n");
-    seq_printf(archivo,"%lu",info_ram.freeram);
+    seq_printf(archivo,"{\"data\":");
+    seq_printf(archivo,"\n{\n");
+    seq_printf(archivo,"    \"freeram\": \"%lu\",\n",info_ram.freeram*info_ram.mem_unit);
+    seq_printf(archivo,"    \"totalram\": \"%lu\"\n",info_ram.totalram*info_ram.mem_unit);
+    seq_printf(archivo,"  }\n");
+    seq_printf(archivo,"}\n");
     return 0;
 }
 
