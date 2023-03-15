@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  goapp:
+    container_name: go-practica2
+    restart: always
+    build: ./Backend_go
+    image: josadriang/backendgo-practica2
+
+  servernode:
+    container_name: servernode-practica2
+    restart: always
+    build: ./Backend_node
+    image: josadriang/servernode-practica2
+    ports:
+      - "5000:5000"
+  
+  frontend:
+    container_name: frontend-practica2
+    restart: always
+    build: ./Frontend
+    image: josadriang/front-practica2
+    ports:
+      - "3000:3000"
