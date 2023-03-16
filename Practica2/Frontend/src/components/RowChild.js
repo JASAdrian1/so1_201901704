@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import {SERVER} from '../pages/Dashboard'
 
 const RowChild = ({pid}) => {
     const [procesosChild, setprocesosChild] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:5000/procesoschild/${pid}`)
+        fetch(`${SERVER}procesoschild/${pid}`)
             .then((child)=>child.json())
             .then((child)=>{
                 console.log(child)
