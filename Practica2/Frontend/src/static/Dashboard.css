@@ -5,8 +5,15 @@
 }
 
 .tabla-procesos th,.tabla-procesos td{
-    
     box-shadow: none;
+}
+
+.padre{
+  background-color: grey;
+  color: white;
+}
+.child{
+  background-color: lightgray;
 }
 
 .graficas{

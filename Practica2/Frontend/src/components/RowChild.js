@@ -14,7 +14,7 @@ const RowChild = ({pid}) => {
     <React.Fragment>
         { procesosChild &&
             procesosChild.map(child =>(
-                <tr>
+                <tr className='child'>
                     <td>{child.pid}</td>
                     <td>{child.nombre}</td>
                     <td></td>

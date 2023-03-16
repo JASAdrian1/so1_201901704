@@ -18,7 +18,7 @@ const RowProcess = ({proceso}) => {
     
   return (
     <React.Fragment>
-      <tr>
+      <tr className='padre'>
         <td>{proceso.pid}</td>
         <td>{proceso.nombre}</td>
         <td>{proceso.username}</td>
