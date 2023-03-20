@@ -1,0 +1,28 @@
+.procesos{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tabla-procesos th,.tabla-procesos td{
+    box-shadow: none;
+}
+
+.padre{
+  background-color: grey;
+  color: white;
+}
+.child{
+  background-color: lightgray;
+}
+
+.graficas{
+  display: flex;
+  
+}
+
+.grafica-ram{
+  display: block;
+  width: 45%;
+  margin: 20px 20px 20px 20px;
+}
