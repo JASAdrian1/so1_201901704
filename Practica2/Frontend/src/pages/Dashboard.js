@@ -4,7 +4,7 @@ import Tabla from '../components/Tabla'
 
 import '../static/Dashboard.css'
 
-export const SERVER = "http://34.23.233.89/"
+export const SERVER = "http://34.75.12.230/"
 
 const Dashboard = () => {
   const [procesos, setProcesos] = useState([])
@@ -78,7 +78,7 @@ useEffect(() => {
         <h1>Estado de los procesos</h1>
         <div>
           <div>
-            <span>En ejcucion</span>
+            <span>En ejecucion</span>
             <span>{estadoProcesos.ejecucion}</span>
           </div>
           <div>

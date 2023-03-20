@@ -23,6 +23,7 @@ const RowProcess = ({proceso}) => {
         <td>{proceso.nombre}</td>
         <td>{proceso.username}</td>
         <td>{proceso.estado}</td>
+        <td>{proceso.ram}</td>
         <td>
           <button onClick={() => setmuestraHijos(!muestraHijos)}>
             {btnText}
