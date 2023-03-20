@@ -7,6 +7,7 @@ CREATE TABLE proceso(
     pid VARCHAR(500) NOT NULL,
     username VARCHAR(500) NULL,
     nombre VARCHAR(500) NOT NULL,
+    ram VARCHAR (50) NOT NULL,
     estado VARCHAR(500) NOT NULL
 );
 

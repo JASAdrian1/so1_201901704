@@ -7,12 +7,12 @@
 #include <asm/uaccess.h>
 #include <linux/seq_file.h>
 
-/* libreria de memoria ram*/
-#include <linux/hugetlb.h>
-
 #include <linux/sched.h>
 #include <linux/cred.h>
 #include <linux/sched/signal.h>
+
+#include <linux/mm.h> 
+#include <linux/sched/mm.h>
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Modulo de cpu, practica 2");
@@ -20,9 +20,9 @@ MODULE_AUTHOR("Jose Adrian Aguilar Sanchez");
 
 
 struct task_struct * cpu;
+struct mm_struct *mm;
 struct task_struct * child;
 struct list_head * lstProcess;
-
 
 static int escribir_archivo(struct seq_file *archivo, void *v){
     //Devolviendo los valores como json
@@ -33,6 +33,11 @@ static int escribir_archivo(struct seq_file *archivo, void *v){
         seq_printf(archivo,"    \"nombre\": \"%s\",\n",cpu->comm);
         seq_printf(archivo,"    \"estado\": \"%d\",\n",cpu->__state);
         seq_printf(archivo,"    \"uid\": \"%d\",\n",cpu->cred->uid);
+        if(cpu->active_mm != NULL){
+            unsigned long ram_usage = get_mm_rss(cpu->active_mm) << PAGE_SHIFT;
+            seq_printf(archivo,"    \"ram\": \"%lu\",\n",ram_usage);
+        }
+        //seq_printf(archivo,"    \"ram\": \"%lu\",\n",rss_bytes);
         seq_printf(archivo,"    \"child\": [\n");
         list_for_each(lstProcess, &(cpu->children)){
             child = list_entry(lstProcess, struct task_struct, sibling);

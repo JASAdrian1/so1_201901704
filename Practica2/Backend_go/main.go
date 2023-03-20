@@ -16,11 +16,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var ramTotalGlobal int64
+
 type procesos struct {
 	Pid    string          `json:"pid"`
 	Nombre string          `json:"nombre"`
 	Uid    string          `json:"uid"`
 	Estado string          `json:"estado"`
+	UsoRam string			`json:"ram"`
 	Child  []proceso_child `json:"child"`
 }
 
@@ -42,12 +45,13 @@ func main() {
 
 func procesarCPU() {
 	for {
+		fmt.Println("Hoal?")
 		modulo_cpu := leer_modulo_cpu()
 		//Se quitan unos errores de sintaxis que trae el json del cpu
 		modulo_cpu = strings.Replace(modulo_cpu, "},]", "}]", -1)
 		//fmt.Println(modulo_cpu)
 		insertarProcesosCPU(modulo_cpu)
-		time.Sleep(15 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 }
 
@@ -63,6 +67,7 @@ func procesarRAM() {
 	vaciarTablaRam(db)
 
 	for {
+		fmt.Println("Hola2?")
 		modulo_ram := leer_modulo_ram()
 		insertarUsoRam(modulo_ram)
 		time.Sleep(5 * time.Second)
@@ -77,10 +82,10 @@ func conectarDB() (*sql.DB, error) {
 	db_password := goDotEnvVariable("DB_PASSWORD")
 	db_host := goDotEnvVariable("DB_HOST")
 	db_user := goDotEnvVariable("DB_USER")
-
 	db, err := sql.Open("mysql", db_user+":"+db_password+"@tcp"+"("+db_host+":3306"+")/"+db_nombre)
 
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	return db, nil
@@ -176,12 +181,20 @@ func insertarProcesosCPU(procesos_cpu string) {
 	vaciarTablasProcesos(db)
 
 	for _, value := range modulo_cpu_json["data"] {
+		/* if value.UsoRam != ""{
+			//ramProceso,_ := strconv.ParseInt(value.UsoRam, 10, 0)
+			//fmt.Println("RAM: ",value.UsoRam)
+			//fmt.Println("RAM total: ", ramTotalGlobal)
+			//fmt.Println("Porcentaje: ", float64(ramProceso) / float64(ramTotalGlobal) * 100)
+		} */
 		//Obteniendo el nombre del usuario
 		username := getUsernameProcess(value.Uid)
-		//fmt.Println(index, ": ", value.Pid)
+		//Obteniendo el porcentaje de RAM del proceso
+		ramProceso,_ := strconv.ParseInt(value.UsoRam, 10, 0)
+		porcentajeRamProceso := float64(ramProceso) / float64(ramTotalGlobal) * 100
 		fmt.Println("Insertando proceso: ", value.Pid)
 		//Se crea la query para la insercion de procesos
-		query := `INSERT INTO proceso VALUES(` + value.Pid + `,"` + value.Pid + `","` + value.Nombre + `","` + value.Estado + `","` + username + `")`
+		query := `INSERT INTO proceso VALUES(` + value.Pid + `,"` + value.Pid + `","` + value.Nombre + `","` + value.Estado + `","` + username + `","` + fmt.Sprintf("%.3f", porcentajeRamProceso) + `")`
 		//Se ejecuta el query
 		_, err3 := db.Exec(query)
 		if err3 != nil {
@@ -213,10 +226,13 @@ func insertarUsoRam(datos string) {
 		log.Panic(err)
 	}
 	freeram, _ := strconv.ParseInt(modulo_ram_cpu["data"].Freeram, 10, 0)
-	totaram, _ := strconv.ParseInt(modulo_ram_cpu["data"].Totalram, 10, 0)
-	porcentaje_uso := (float64(totaram) - float64(freeram)) / float64(totaram) * 100.0
+	totalram, _ := strconv.ParseInt(modulo_ram_cpu["data"].Totalram, 10, 0)
+	porcentaje_uso := (float64(totalram) - float64(freeram)) / float64(totalram) * 100.0
+	if totalram != 0{
+		ramTotalGlobal = totalram
+	}
 	fmt.Println(freeram)
-	fmt.Println(totaram)
+	fmt.Println(totalram)
 	fmt.Println("Porcentaje de uso de ram: ", porcentaje_uso)
 	//Se realiza la conexion con la base de datos
 	db, err := conectarDB()
