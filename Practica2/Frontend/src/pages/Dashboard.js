@@ -4,6 +4,8 @@ import Tabla from '../components/Tabla'
 
 import '../static/Dashboard.css'
 
+export const SERVER = "http://34.23.233.89/"
+
 const Dashboard = () => {
   const [procesos, setProcesos] = useState([])
   const [usoRam, setUsoRam] = useState([])
@@ -18,7 +20,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const interval = setInterval(() =>{
-      fetch(`http://localhost:5000/procesoscpu`)
+      fetch(`${SERVER}procesoscpu`)
         .then((data)=>data.json())
         .then((data)=>{
           setProcesos(data.data)
@@ -46,7 +48,7 @@ useEffect(() => {
   
   useEffect(() =>{
     const interval = setInterval(()=>{
-      fetch(`http://localhost:5000/usoram`)
+      fetch(`${SERVER}usoram`)
         .then((data)=>data.json())
         .then((data)=>{
           //console.log(data.data)}
