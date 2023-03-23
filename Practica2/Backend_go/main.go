@@ -51,7 +51,7 @@ func procesarCPU() {
 		modulo_cpu = strings.Replace(modulo_cpu, "},]", "}]", -1)
 		//fmt.Println(modulo_cpu)
 		insertarProcesosCPU(modulo_cpu)
-		time.Sleep(1 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
 }
 
